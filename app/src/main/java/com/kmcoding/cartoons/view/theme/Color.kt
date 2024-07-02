@@ -1,4 +1,4 @@
-package com.kmcoding.cartoons.ui.theme
+package com.kmcoding.cartoons.view.theme
 
 import androidx.compose.ui.graphics.Color
 

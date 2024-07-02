@@ -1,4 +1,4 @@
-package com.kmcoding.cartoons.ui.theme
+package com.kmcoding.cartoons.view.theme
 
 import android.app.Activity
 import android.os.Build
