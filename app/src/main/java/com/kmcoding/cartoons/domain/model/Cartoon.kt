@@ -1,14 +1,14 @@
 package com.kmcoding.cartoons.domain.model
 
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
 data class Cartoon(
   val id: Int = 0,
   val title: String = "",
   val year: Int = 0,
   val episodes: Int = 0,
-  @SerialName("runtime_in_minutes") val episodeDuration: Int = 0,
-  @SerialName("image") val coverUrl: String = "",
-  @SerialName("creator") val creators: List<String> = listOf(),
-  @SerialName("genre") val genres: List<String> = listOf()
+  @SerializedName("runtime_in_minutes") val episodeDuration: Int = 0,
+  @SerializedName("image") val coverUrl: String = "",
+  @SerializedName("creator") val creators: List<String> = listOf(),
+  @SerializedName("genre") val genres: List<String> = listOf()
 )

@@ -58,10 +58,13 @@ dependencies {
   implementation(libs.ui.tooling.preview)
   implementation(libs.material3)
   implementation(libs.retrofit)
+  implementation(libs.retrofit.converter.gson)
   implementation(libs.okhttp3)
   implementation(libs.kotlinx.serialization.json)
+  implementation(libs.coil)
   implementation(libs.hilt.android)
   kapt(libs.hilt.compiler)
+  implementation(libs.hilt.navigation.compose)
 
   testImplementation(libs.junit)
 
