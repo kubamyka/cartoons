@@ -9,11 +9,12 @@ lifecycle-runtime-ktx = "2.8.2"
 activity-compose = "1.9.0"
 compose-bom = "2024.06.00"
 hilt-version = "2.50"
-hilt-navigation-version = "1.0.0"
+hilt-navigation-version = "1.2.0"
 retrofit-version = "2.9.0"
 okhttp3-version = "5.0.0-alpha.3"
 kotlinx-serialization-json-version = "1.7.1"
 coil-version = "2.4.0"
+compose-navigation-version = "2.8.0-alpha08"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -38,6 +39,7 @@ retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-
 okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3-version" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json-version" }
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-version" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "compose-navigation-version" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
@@ -45,6 +47,9 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "org-jetbrains-kotlin-android" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-version" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "org-jetbrains-kotlin-android" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "org-jetbrains-kotlin-android" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-android" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "org-jetbrains-kotlin-android" }
 
 [bundles]
 

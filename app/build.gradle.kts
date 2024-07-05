@@ -5,6 +5,8 @@ plugins {
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.hilt)
   alias(libs.plugins.kapt)
+  alias(libs.plugins.kotlin.serialization)
+  alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -65,6 +67,7 @@ dependencies {
   implementation(libs.hilt.android)
   kapt(libs.hilt.compiler)
   implementation(libs.hilt.navigation.compose)
+  implementation(libs.navigation.compose)
 
   testImplementation(libs.junit)
 

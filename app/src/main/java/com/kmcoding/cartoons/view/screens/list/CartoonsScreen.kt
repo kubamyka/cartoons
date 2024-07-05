@@ -18,10 +18,15 @@ import com.kmcoding.cartoons.R
 import com.kmcoding.cartoons.data.source.FakeDataSource.fakeCartoons
 import com.kmcoding.cartoons.domain.model.Cartoon
 import com.kmcoding.cartoons.view.screens.list.components.CartoonsList
+import kotlinx.serialization.Serializable
+
+@Serializable
+object CartoonsListScreenNav
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartoonsScreen(modifier: Modifier = Modifier, cartoons: List<Cartoon> = listOf()) {
+fun CartoonsScreen(modifier: Modifier = Modifier, cartoons: List<Cartoon> = listOf(),
+  navigateToDetails: (Cartoon) -> Unit) {
   Scaffold(topBar = {
     CenterAlignedTopAppBar(
       colors = topAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -30,7 +35,7 @@ fun CartoonsScreen(modifier: Modifier = Modifier, cartoons: List<Cartoon> = list
       })
   }, modifier = modifier) { innerPadding ->
     Box(modifier = Modifier.padding(innerPadding)) {
-      CartoonsList(cartoons = cartoons, navigateToDetails = {})
+      CartoonsList(cartoons = cartoons, navigateToDetails = navigateToDetails)
     }
   }
 }
@@ -38,5 +43,5 @@ fun CartoonsScreen(modifier: Modifier = Modifier, cartoons: List<Cartoon> = list
 @Preview(showBackground = true)
 @Composable
 fun CartoonsScreenPreview() {
-  CartoonsScreen(cartoons = fakeCartoons)
+  CartoonsScreen(cartoons = fakeCartoons, navigateToDetails = {})
 }
