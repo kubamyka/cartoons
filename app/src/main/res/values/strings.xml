@@ -3,4 +3,5 @@
 
   <string name="year">Year: %d</string>
   <string name="episodes">Episodes: %d</string>
+  <string name="back">Back</string>
 </resources>

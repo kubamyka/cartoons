@@ -8,13 +8,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
+import com.kmcoding.cartoons.domain.model.Cartoon
 import com.kmcoding.cartoons.view.screens.detail.CartoonDetailScreen
-import com.kmcoding.cartoons.view.screens.detail.CartoonDetailScreenNav
-import com.kmcoding.cartoons.view.screens.detail.CartoonDetailScreenNav2
+import com.kmcoding.cartoons.view.screens.detail.CartoonDetailsViewModel
 import com.kmcoding.cartoons.view.screens.list.CartoonsListScreenNav
 import com.kmcoding.cartoons.view.screens.list.CartoonsListViewModel
 import com.kmcoding.cartoons.view.screens.list.CartoonsScreen
@@ -34,13 +34,14 @@ class MainActivity : ComponentActivity() {
             val cartoonsListViewModel: CartoonsListViewModel = hiltViewModel()
             val cartoons by cartoonsListViewModel.cartoons.collectAsState()
             CartoonsScreen(cartoons = cartoons, navigateToDetails = { cartoon ->
-              navController.navigate(CartoonDetailScreenNav2)
+              navController.navigate(route = cartoon)
             }, modifier = Modifier.fillMaxSize())
           }
 
-          composable<CartoonDetailScreenNav2> { backStackEntry ->
-            //val cartoon = backStackEntry.toRoute<CartoonDetailScreenNav>().cartoon
-            //CartoonDetailScreen(cartoon = cartoon)
+          composable<Cartoon> { backStackEntry ->
+            val cartoonDetailsViewModel: CartoonDetailsViewModel = hiltViewModel()
+            val cartoon by cartoonDetailsViewModel.cartoon.collectAsStateWithLifecycle()
+            CartoonDetailScreen(cartoon = cartoon, navigateBack = { navController.navigateUp() })
           }
         }
       }

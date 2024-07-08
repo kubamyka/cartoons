@@ -1,5 +1,6 @@
 package com.kmcoding.cartoons.view.screens.list
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kmcoding.cartoons.domain.model.Cartoon
@@ -31,7 +32,7 @@ class CartoonsListViewModel @Inject constructor(private val cartoonRepository: C
       cartoonRepository.getCartoons()
         .flowOn(Dispatchers.IO)
         .catch { error ->
-
+          Log.e("ERROR", "Cartoon list error: ${error.localizedMessage}")
         }.map { list ->
           list.sortedBy { it.title }
         }.collect { list ->

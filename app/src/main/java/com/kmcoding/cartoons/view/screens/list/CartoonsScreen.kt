@@ -9,6 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,7 +29,7 @@ object CartoonsListScreenNav
 fun CartoonsScreen(modifier: Modifier = Modifier, cartoons: List<Cartoon> = listOf(),
   navigateToDetails: (Cartoon) -> Unit) {
   Scaffold(topBar = {
-    CenterAlignedTopAppBar(
+    TopAppBar(
       colors = topAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer,
         titleContentColor = MaterialTheme.colorScheme.primary), title = {
         Text(stringResource(id = R.string.app_name))

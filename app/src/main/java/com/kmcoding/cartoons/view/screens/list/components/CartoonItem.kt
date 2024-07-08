@@ -1,6 +1,5 @@
 package com.kmcoding.cartoons.view.screens.list.components
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -52,13 +51,12 @@ fun CartoonItem(modifier: Modifier = Modifier, cartoon: Cartoon,
 
 @Composable
 fun CartoonCover(coverUrl: String) {
-  Log.e("TAG", coverUrl)
   Card(shape = RoundedCornerShape(16.dp), border = BorderStroke(width = 1.dp, color = Color.Black),
     modifier = Modifier.padding(12.dp),
     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.onPrimary)){
       AsyncImage(model = coverUrl, error = painterResource(id = R.drawable.ic_no_photo),
-        contentDescription = "", modifier = Modifier.size(64.dp), contentScale = ContentScale.Crop)
+        contentDescription = null, modifier = Modifier.size(64.dp), contentScale = ContentScale.Crop)
     }
   }
 }
