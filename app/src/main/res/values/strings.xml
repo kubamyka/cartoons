@@ -3,5 +3,10 @@
 
   <string name="year">Year: %d</string>
   <string name="episodes">Episodes: %d</string>
+  <string name="episode_duration">Episode duration: %d</string>
+  <string name="creator">Creator: %s</string>
+  <string name="creators">Creators: %s</string>
+  <string name="genre">Genre: %s</string>
+  <string name="genres">Genres: %s</string>
   <string name="back">Back</string>
 </resources>

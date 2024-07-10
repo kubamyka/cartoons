@@ -13,7 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kmcoding.cartoons.domain.model.Cartoon
-import com.kmcoding.cartoons.view.screens.detail.CartoonDetailScreen
+import com.kmcoding.cartoons.view.screens.detail.CartoonDetailsScreen
 import com.kmcoding.cartoons.view.screens.detail.CartoonDetailsViewModel
 import com.kmcoding.cartoons.view.screens.list.CartoonsListScreenNav
 import com.kmcoding.cartoons.view.screens.list.CartoonsListViewModel
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
           composable<Cartoon> { backStackEntry ->
             val cartoonDetailsViewModel: CartoonDetailsViewModel = hiltViewModel()
             val cartoon by cartoonDetailsViewModel.cartoon.collectAsStateWithLifecycle()
-            CartoonDetailScreen(cartoon = cartoon, navigateBack = { navController.navigateUp() })
+            CartoonDetailsScreen(cartoon = cartoon, navigateBack = { navController.navigateUp() })
           }
         }
       }
