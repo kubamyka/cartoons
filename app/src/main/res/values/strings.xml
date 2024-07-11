@@ -9,4 +9,6 @@
   <string name="genre">Genre: %s</string>
   <string name="genres">Genres: %s</string>
   <string name="back">Back</string>
+  <string name="close">Close</string>
+  <string name="search">Search</string>
 </resources>

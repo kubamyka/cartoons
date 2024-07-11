@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,10 +31,16 @@ class MainActivity : ComponentActivity() {
         NavHost(navController = navController, startDestination = CartoonsListScreenNav) {
           composable<CartoonsListScreenNav> {
             val cartoonsListViewModel: CartoonsListViewModel = hiltViewModel()
-            val cartoons by cartoonsListViewModel.cartoons.collectAsState()
-            CartoonsScreen(cartoons = cartoons, navigateToDetails = { cartoon ->
-              navController.navigate(route = cartoon)
-            }, modifier = Modifier.fillMaxSize())
+            val cartoons by cartoonsListViewModel.cartoons.collectAsStateWithLifecycle()
+            val isSearchActive by cartoonsListViewModel.isSearchActive.collectAsStateWithLifecycle()
+            val query by cartoonsListViewModel.searchQuery.collectAsStateWithLifecycle()
+            CartoonsScreen(cartoons = cartoons, query = query,
+              onQueryChange = { cartoonsListViewModel.updateQuery(it) },
+              isSearchActive = isSearchActive,
+              toggleSearchActive = { cartoonsListViewModel.toggleSearchActive() },
+              navigateToDetails = { cartoon ->
+                navController.navigate(route = cartoon)
+              }, modifier = Modifier.fillMaxSize())
           }
 
           composable<Cartoon> { backStackEntry ->
