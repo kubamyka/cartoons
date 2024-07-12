@@ -67,9 +67,9 @@ fun CartoonContent(cartoon: Cartoon) {
     .padding(12.dp),
     horizontalAlignment = Alignment.Start) {
     Text(text = cartoon.title, style = MaterialTheme.typography.titleLarge)
-    Text(text = stringResource(id = R.string.episodes, cartoon.episodes),
+    Text(text = "${stringResource(id = R.string.creation_year)} ${cartoon.year}",
       style = MaterialTheme.typography.bodySmall)
-    Text(text = stringResource(id = R.string.year, cartoon.year),
+    Text(text = "${stringResource(id = R.string.episodes)} ${cartoon.episodes}",
       style = MaterialTheme.typography.bodySmall)
   }
 }

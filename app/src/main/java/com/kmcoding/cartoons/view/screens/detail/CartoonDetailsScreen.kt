@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,7 +42,7 @@ fun CartoonDetailsScreen(cartoon: Cartoon, modifier: Modifier = Modifier,
   navigateBack: () -> Unit = {}) {
   Scaffold(topBar = {
     TopAppBar(colors = topAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer,
-      titleContentColor = MaterialTheme.colorScheme.primary), title = {
+      titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer), title = {
       Text(text = cartoon.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }, navigationIcon = {
       IconButton(onClick = navigateBack) {
@@ -65,72 +66,63 @@ fun CartoonDetailsScreen(cartoon: Cartoon, modifier: Modifier = Modifier,
 
 @Composable
 fun CartoonDetailsPortraitContent(cartoon: Cartoon, innerPadding: PaddingValues) {
-  Column(modifier = Modifier
-    .fillMaxSize()
-    .padding(innerPadding)
-    .verticalScroll(rememberScrollState())) {
+  Column(
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(innerPadding)
+      .verticalScroll(rememberScrollState())) {
     AsyncImage(model = cartoon.coverUrl, contentDescription = null,
-      error = painterResource(id = R.drawable.ic_no_photo),
-      contentScale = ContentScale.FillWidth, modifier = Modifier.fillMaxWidth())
+      error = painterResource(id = R.drawable.ic_no_photo), contentScale = ContentScale.FillWidth,
+      modifier = Modifier.fillMaxWidth())
     CartoonDetailsTexts(cartoon = cartoon)
   }
 }
 
 @Composable
 fun CartoonDetailsLandscapeContent(cartoon: Cartoon, innerPadding: PaddingValues) {
-  Row(modifier = Modifier
-    .fillMaxSize()
-    .padding(innerPadding)
-    .verticalScroll(rememberScrollState())) {
+  Row(
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(innerPadding)
+      .verticalScroll(rememberScrollState())) {
     AsyncImage(model = cartoon.coverUrl, contentDescription = null,
-      error = painterResource(id = R.drawable.ic_no_photo),
-      contentScale = ContentScale.FillWidth, modifier = Modifier.weight(1f))
+      error = painterResource(id = R.drawable.ic_no_photo), contentScale = ContentScale.FillWidth,
+      modifier = Modifier.weight(1f))
     CartoonDetailsTexts(cartoon = cartoon, modifier = Modifier.weight(1f))
   }
 }
 
 @Composable
-fun CartoonDetailsTexts(cartoon: Cartoon, modifier: Modifier = Modifier){
+fun CartoonDetailsTexts(cartoon: Cartoon, modifier: Modifier = Modifier) {
   Column(modifier = modifier.padding(16.dp)) {
-    Text(text = stringResource(id = R.string.year, cartoon.year),
-      style = MaterialTheme.typography.bodyLarge)
-    Text(text = stringResource(id = R.string.episodes, cartoon.episodes),
-      style = MaterialTheme.typography.bodyLarge)
-    Text(text = stringResource(id = R.string.episode_duration, cartoon.episodeDuration),
-      style = MaterialTheme.typography.bodyLarge)
-    getCreatorsStringResource(cartoon = cartoon)?.let {
-      Text(text = it, style = MaterialTheme.typography.bodyLarge)
+    LabelledText(label = R.string.creation_year, value = cartoon.year.toString())
+    LabelledText(label = R.string.episodes, value = cartoon.episodes.toString())
+    LabelledText(label = R.string.episode_duration, value = cartoon.episodeDuration.toString())
+
+    if (cartoon.creators.isNotEmpty()) {
+      LabelledTextForListOfStrings(singleResource = R.string.creator,
+        pluralResource = R.string.creators, list = cartoon.creators)
     }
-    getGenresStringResource(cartoon = cartoon)?.let {
-      Text(text = it, style = MaterialTheme.typography.bodyLarge)
+    if (cartoon.genres.isNotEmpty()) {
+      LabelledTextForListOfStrings(singleResource = R.string.genre,
+        pluralResource = R.string.genres, list = cartoon.genres)
     }
   }
 }
 
 @Composable
-private fun getCreatorsStringResource(cartoon: Cartoon): String? {
-  return getStringResourceFromListOfStrings(singleResource = R.string.creator,
-    pluralResource = R.string.creators, list = cartoon.creators)
+private fun LabelledText(@StringRes
+label: Int, value: String) {
+  Text(text = stringResource(id = label), style = MaterialTheme.typography.bodySmall,
+    fontWeight = FontWeight.Bold)
+  Text(text = value, style = MaterialTheme.typography.bodyLarge,
+    modifier = Modifier.padding(bottom = 12.dp))
 }
 
 @Composable
-private fun getGenresStringResource(cartoon: Cartoon): String? {
-  return getStringResourceFromListOfStrings(singleResource = R.string.genre,
-    pluralResource = R.string.genres, list = cartoon.genres)
-}
-
-@Composable
-private fun getStringResourceFromListOfStrings(@StringRes
-singleResource: Int,
-  @StringRes
-  pluralResource: Int, list: List<String>): String? {
-  if (list.isEmpty()) return null
-
-  return if (list.size == 1) {
-    stringResource(id = singleResource, list[0])
-  } else {
-    stringResource(id = pluralResource, list.joinToString(", "))
-  }
+private fun LabelledTextForListOfStrings(@StringRes singleResource: Int, @StringRes pluralResource: Int, list: List<String>) {
+  LabelledText(label = if (list.size == 1) singleResource else pluralResource,
+    value = if (list.size == 1) list[0] else list.joinToString(", "))
 }
 
 @Preview(showBackground = true)

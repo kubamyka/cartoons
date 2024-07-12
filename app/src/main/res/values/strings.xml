@@ -1,14 +1,15 @@
 <resources>
   <string name="app_name">Cartoons</string>
 
-  <string name="year">Year: %d</string>
-  <string name="episodes">Episodes: %d</string>
-  <string name="episode_duration">Episode duration: %d</string>
-  <string name="creator">Creator: %s</string>
-  <string name="creators">Creators: %s</string>
-  <string name="genre">Genre: %s</string>
-  <string name="genres">Genres: %s</string>
+  <string name="creation_year">Creation year:</string>
+  <string name="episodes">Episodes:</string>
+  <string name="episode_duration">Episode duration (min):</string>
+  <string name="creator">Creator:</string>
+  <string name="creators">Creators:</string>
+  <string name="genre">Genre:</string>
+  <string name="genres">Genres:</string>
   <string name="back">Back</string>
   <string name="close">Close</string>
   <string name="search">Search</string>
+  <string name="enter_phrase_here">Enter phrase here…</string>
 </resources>

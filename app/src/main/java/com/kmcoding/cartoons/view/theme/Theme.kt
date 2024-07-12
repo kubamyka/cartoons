@@ -33,7 +33,7 @@ private val lightScheme = lightColorScheme(
   errorContainer = errorContainerLight,
   onErrorContainer = onErrorContainerLight,
   background = backgroundLight,
-  onBackground = onBackgroundLight
+  onBackground = onBackgroundLight,
 )
 
 private val darkScheme = darkColorScheme(
