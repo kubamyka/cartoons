@@ -23,6 +23,9 @@ import javax.inject.Inject
 class CartoonsListViewModel @Inject constructor(private val cartoonRepository: CartoonRepository) :
   ViewModel() {
 
+  private val _isLoading = MutableStateFlow(false)
+  val isLoading = _isLoading.asStateFlow()
+
   private val _isSearchActive = MutableStateFlow(false)
   val isSearchActive = _isSearchActive.asStateFlow()
 
@@ -45,13 +48,18 @@ class CartoonsListViewModel @Inject constructor(private val cartoonRepository: C
     fetchCartoons()
   }
 
-  private fun fetchCartoons() {
+  fun fetchCartoons() {
+    setLoading(true)
     viewModelScope.launch {
-      cartoonRepository.getCartoons().flowOn(Dispatchers.IO).catch { error ->
+      cartoonRepository.getCartoons()
+        .flowOn(Dispatchers.IO)
+        .catch { error ->
+          setLoading(false)
           Log.e("ERROR", "Cartoon list error: ${error.localizedMessage}")
         }.map { list ->
           list.sortedBy { it.title }
         }.collect { list ->
+          setLoading(false)
           _cartoons.update { list }
         }
     }
@@ -64,5 +72,9 @@ class CartoonsListViewModel @Inject constructor(private val cartoonRepository: C
   fun toggleSearchActive() {
     updateQuery("")
     _isSearchActive.update { !it }
+  }
+
+  private fun setLoading(loading: Boolean) {
+    _isLoading.update { loading }
   }
 }

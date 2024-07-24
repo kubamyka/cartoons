@@ -1,6 +1,5 @@
 package com.kmcoding.cartoons.view.screens.list.components
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,7 +17,6 @@ fun CartoonsList(
   cartoons: List<Cartoon> = listOf(),
   navigateToDetails: (Cartoon) -> Unit
 ) {
-  Log.e("TEST", "CartoonsList: ${cartoons.size}")
   LazyColumn(modifier = modifier.fillMaxSize(),
     contentPadding = PaddingValues(all = 16.dp)){
     items(

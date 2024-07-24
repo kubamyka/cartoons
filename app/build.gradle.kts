@@ -67,6 +67,8 @@ dependencies {
   kapt(libs.hilt.compiler)
   implementation(libs.hilt.navigation.compose)
   implementation(libs.navigation.compose)
+  implementation(libs.compose.material)
+  implementation(libs.lifecycle.viewmodel.compose)
 
   testImplementation(libs.junit)
 

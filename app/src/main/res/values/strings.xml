@@ -12,4 +12,5 @@
   <string name="close">Close</string>
   <string name="search">Search</string>
   <string name="enter_phrase_here">Enter phrase here…</string>
+  <string name="empty_list">There are no items to display</string>
 </resources>
