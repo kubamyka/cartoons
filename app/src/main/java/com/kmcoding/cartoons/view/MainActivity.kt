@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
               isSearchActive = isSearchActive,
               isLoading = isLoading,
               pullRefreshState = pullRefreshState,
+              snackBarChannel = cartoonsListViewModel.snackBarChannel,
               toggleSearchActive = { cartoonsListViewModel.toggleSearchActive() },
               navigateToDetails = { cartoon ->
                 navController.navigate(route = cartoon)
