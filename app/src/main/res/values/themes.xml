@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+  <style name="Theme.CartoonSplashScreen" parent="Theme.SplashScreen" >
+    <item name="windowSplashScreenBackground">#FFAAC7FF</item>
+    <item name="windowSplashScreenAnimatedIcon">@drawable/ic_tv</item>
+    <item name="postSplashScreenTheme">@style/Theme.Cartoons</item>
+  </style>
+
   <style name="Theme.Cartoons" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

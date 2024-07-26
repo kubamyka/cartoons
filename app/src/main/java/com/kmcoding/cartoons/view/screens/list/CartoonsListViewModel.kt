@@ -49,7 +49,6 @@ class CartoonsListViewModel @Inject constructor(private val cartoonRepository: C
     }
   }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _cartoons.value)
 
-
   init {
     fetchCartoons()
   }
@@ -71,8 +70,8 @@ class CartoonsListViewModel @Inject constructor(private val cartoonRepository: C
     }
   }
 
-  fun updateQuery(query: String) {
-    _searchQuery.update { query }
+  private fun setLoading(loading: Boolean) {
+    _isLoading.update { loading }
   }
 
   fun toggleSearchActive() {
@@ -80,8 +79,8 @@ class CartoonsListViewModel @Inject constructor(private val cartoonRepository: C
     _isSearchActive.update { !it }
   }
 
-  private fun setLoading(loading: Boolean) {
-    _isLoading.update { loading }
+  fun updateQuery(query: String) {
+    _searchQuery.update { query }
   }
 
   private suspend fun sendErrorMessage(error: Throwable) {

@@ -69,6 +69,7 @@ dependencies {
   implementation(libs.navigation.compose)
   implementation(libs.compose.material)
   implementation(libs.lifecycle.viewmodel.compose)
+  implementation(libs.splashscreen)
 
   testImplementation(libs.junit)
 
