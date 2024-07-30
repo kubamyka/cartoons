@@ -2,8 +2,8 @@
 <resources>
 
   <style name="Theme.CartoonSplashScreen" parent="Theme.SplashScreen" >
-    <item name="windowSplashScreenBackground">#FFAAC7FF</item>
-    <item name="windowSplashScreenAnimatedIcon">@drawable/ic_tv</item>
+    <item name="windowSplashScreenBackground">@color/white</item>
+    <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen</item>
     <item name="postSplashScreenTheme">@style/Theme.Cartoons</item>
   </style>
 
