@@ -3,6 +3,7 @@ package com.kmcoding.cartoons.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -26,7 +27,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-  @OptIn(ExperimentalMaterialApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     installSplashScreen()
@@ -36,24 +36,8 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = CartoonsListScreenNav) {
           composable<CartoonsListScreenNav> {
-            val cartoonsListViewModel: CartoonsListViewModel = hiltViewModel()
-            val cartoons by cartoonsListViewModel.cartoons.collectAsStateWithLifecycle()
-            val isSearchActive by cartoonsListViewModel.isSearchActive.collectAsStateWithLifecycle()
-            val isLoading by cartoonsListViewModel.isLoading.collectAsStateWithLifecycle()
-            val query by cartoonsListViewModel.searchQuery.collectAsStateWithLifecycle()
-            val pullRefreshState = rememberPullRefreshState(refreshing = isLoading,
-              onRefresh = cartoonsListViewModel::fetchCartoons)
-
-            CartoonsScreen(cartoons = cartoons, query = query,
-              onQueryChange = { cartoonsListViewModel.updateQuery(it) },
-              isSearchActive = isSearchActive,
-              isLoading = isLoading,
-              pullRefreshState = pullRefreshState,
-              snackBarChannel = cartoonsListViewModel.snackBarChannel,
-              toggleSearchActive = { cartoonsListViewModel.toggleSearchActive() },
-              navigateToDetails = { cartoon ->
-                navController.navigate(route = cartoon)
-              }, modifier = Modifier.fillMaxSize())
+            val cartoonsListViewModel: CartoonsListViewModel by viewModels<CartoonsListViewModel>()
+            CartoonsScreen(viewModel = cartoonsListViewModel, modifier = Modifier.fillMaxSize())
           }
 
           composable<Cartoon> { backStackEntry ->

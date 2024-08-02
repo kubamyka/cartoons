@@ -16,12 +16,17 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kmcoding.cartoons.R
 import com.kmcoding.cartoons.data.source.FakeDataSource.fakeCartoons
 import com.kmcoding.cartoons.domain.model.Cartoon
@@ -37,16 +42,19 @@ object CartoonsListScreenNav
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CartoonsScreen(query: String, onQueryChange: (String) -> Unit, toggleSearchActive: () -> Unit,
-  navigateToDetails: (Cartoon) -> Unit, modifier: Modifier = Modifier,
-  cartoons: List<Cartoon> = listOf(), isSearchActive: Boolean = false, isLoading: Boolean = false,
-  pullRefreshState: PullRefreshState = rememberPullRefreshState(refreshing = false,
-    onRefresh = {}), snackBarChannel: Flow<UiText>) {
+fun CartoonsScreen(modifier: Modifier = Modifier,
+  viewModel: CartoonsListViewModel = hiltViewModel<CartoonsListViewModel>(),
+  navController: NavController = rememberNavController()) {
+  val cartoons by viewModel.cartoons.collectAsStateWithLifecycle()
+  val isSearchActive by viewModel.isSearchActive.collectAsStateWithLifecycle()
+  val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+  val query by viewModel.searchQuery.collectAsStateWithLifecycle()
+  val pullRefreshState = rememberPullRefreshState(refreshing = isLoading, onRefresh = viewModel::fetchCartoons)
   val snackBarHostState = remember { SnackbarHostState() }
   val context = LocalContext.current
 
   LaunchedEffect(key1 = snackBarHostState) {
-    snackBarChannel.collect { message->
+    viewModel.snackBarChannel.collect { message->
       snackBarHostState.showSnackbar(message = message.asString(context))
     }
   }
@@ -54,8 +62,8 @@ fun CartoonsScreen(query: String, onQueryChange: (String) -> Unit, toggleSearchA
   Scaffold(snackbarHost = {
     SnackbarHost(hostState = snackBarHostState)
   }, topBar = {
-    SearchTopAppBar(query = query, onQueryChange = onQueryChange, isSearchActive = isSearchActive,
-      toggleSearchActive = toggleSearchActive)
+    SearchTopAppBar(query = query, onQueryChange = { viewModel.updateQuery(it) }, isSearchActive = isSearchActive,
+      toggleSearchActive = { viewModel.toggleSearchActive() })
   }, modifier = modifier) { innerPadding ->
     Box(modifier = Modifier
       .fillMaxSize()
@@ -69,7 +77,9 @@ fun CartoonsScreen(query: String, onQueryChange: (String) -> Unit, toggleSearchA
           Text(text = stringResource(id = R.string.empty_list))
         }
       } else {
-        CartoonsList(cartoons = cartoons, navigateToDetails = navigateToDetails)
+        CartoonsList(cartoons = cartoons, navigateToDetails = { cartoon ->
+          navController.navigate(route = cartoon)
+        })
       }
 
       PullRefreshIndicator(
@@ -81,10 +91,8 @@ fun CartoonsScreen(query: String, onQueryChange: (String) -> Unit, toggleSearchA
   }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 fun CartoonsScreenPreview() {
-  CartoonsScreen(query = "", cartoons = fakeCartoons, onQueryChange = {}, toggleSearchActive = {},
-    navigateToDetails = {}, snackBarChannel = emptyFlow())
+  CartoonsScreen()
 }
