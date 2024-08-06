@@ -46,6 +46,10 @@ android {
       excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
   }
+
+  testOptions {
+    unitTests.isReturnDefaultValues = true
+  }
 }
 
 dependencies {
@@ -72,6 +76,9 @@ dependencies {
   kapt(libs.hilt.compiler)
 
   testImplementation(libs.junit)
+  testImplementation(libs.coroutines.test)
+  testImplementation(libs.junit5.engine)
+  testImplementation(libs.junit5.api)
   testImplementation(libs.hilt.android.testing)
   kaptTest(libs.hilt.compiler)
 
