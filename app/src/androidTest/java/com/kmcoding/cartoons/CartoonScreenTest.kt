@@ -1,11 +1,9 @@
 package com.kmcoding.cartoons
 
-import androidx.activity.viewModels
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.kmcoding.cartoons.view.MainActivity
+import com.kmcoding.cartoons.data.repository.FakeCartoonRepositoryImpl
 import com.kmcoding.cartoons.view.screens.list.CartoonsListViewModel
 import com.kmcoding.cartoons.view.screens.list.CartoonsScreen
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -19,17 +17,20 @@ import org.junit.Test
 @HiltAndroidTest
 class CartoonScreenTest {
 
+  private lateinit var cartoonsListViewModel: CartoonsListViewModel
+
   @get:Rule(order = 1)
   var hiltTestRule = HiltAndroidRule(this)
 
   @get:Rule(order = 2)
-  var composeTestRule = createAndroidComposeRule<MainActivity>()
+  var composeTestRule = createComposeRule()
 
   @Before
   fun setup() {
     hiltTestRule.inject()
+    cartoonsListViewModel = CartoonsListViewModel(cartoonRepository = FakeCartoonRepositoryImpl())
     composeTestRule.setContent {
-      CartoonsScreen(viewModel = composeTestRule.activity.viewModels<CartoonsListViewModel>().value)
+      CartoonsScreen(viewModel = cartoonsListViewModel)
     }
   }
 

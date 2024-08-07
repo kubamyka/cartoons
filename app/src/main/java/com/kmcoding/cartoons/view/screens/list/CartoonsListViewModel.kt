@@ -85,7 +85,7 @@ class CartoonsListViewModel @Inject constructor(private val cartoonRepository: C
 
   private suspend fun sendErrorMessage(error: Throwable) {
     val message = error.localizedMessage
-    val uiText = if(message == null) {
+    val uiText = if (message == null) {
       UiText.StringResource(R.string.error_download_cartoons)
     } else {
       UiText.DynamicString(message)

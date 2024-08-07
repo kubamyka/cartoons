@@ -35,4 +35,9 @@ object FakeDataSource {
       genres = listOf("Anime")
     )
   )
+
+
+  fun getFakeCartoonsWithQuerySize(query: String) : Int {
+    return fakeCartoons.filter { it.title.contains(query) }.size
+  }
 }
