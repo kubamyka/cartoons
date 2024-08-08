@@ -1,4 +1,4 @@
-package com.kmcoding.cartoons.extension
+package com.kmcoding.cartoons.util
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

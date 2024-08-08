@@ -3,24 +3,7 @@ package com.kmcoding.cartoons.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.kmcoding.cartoons.domain.model.Cartoon
-import com.kmcoding.cartoons.view.screens.detail.CartoonDetailsScreen
-import com.kmcoding.cartoons.view.screens.detail.CartoonDetailsViewModel
-import com.kmcoding.cartoons.view.screens.list.CartoonsListScreenNav
-import com.kmcoding.cartoons.view.screens.list.CartoonsListViewModel
-import com.kmcoding.cartoons.view.screens.list.CartoonsScreen
 import com.kmcoding.cartoons.view.theme.CartoonsTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,19 +16,7 @@ class MainActivity : ComponentActivity() {
 
     setContent {
       CartoonsTheme {
-        val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = CartoonsListScreenNav) {
-          composable<CartoonsListScreenNav> {
-            val cartoonsListViewModel: CartoonsListViewModel by viewModels<CartoonsListViewModel>()
-            CartoonsScreen(viewModel = cartoonsListViewModel, modifier = Modifier.fillMaxSize())
-          }
-
-          composable<Cartoon> { backStackEntry ->
-            val cartoonDetailsViewModel: CartoonDetailsViewModel = hiltViewModel()
-            val cartoon by cartoonDetailsViewModel.cartoon.collectAsStateWithLifecycle()
-            CartoonDetailsScreen(cartoon = cartoon, navigateBack = { navController.navigateUp() })
-          }
-        }
+        MainContent()
       }
     }
   }

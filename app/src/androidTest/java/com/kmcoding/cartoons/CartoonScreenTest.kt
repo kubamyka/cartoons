@@ -1,9 +1,20 @@
 package com.kmcoding.cartoons
 
+import androidx.activity.compose.setContent
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTextInput
 import com.kmcoding.cartoons.data.repository.FakeCartoonRepositoryImpl
+import com.kmcoding.cartoons.data.source.FakeDataSource.fakeCartoons
+import com.kmcoding.cartoons.util.CartoonsTestHelper.onNodeWithStringIdContentDescription
+import com.kmcoding.cartoons.util.CartoonsTestHelper.onNodeWithStringIdTag
+import com.kmcoding.cartoons.util.CartoonsTestHelper.onNodeWithStringIdText
+import com.kmcoding.cartoons.view.MainActivity
 import com.kmcoding.cartoons.view.screens.list.CartoonsListViewModel
 import com.kmcoding.cartoons.view.screens.list.CartoonsScreen
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -23,25 +34,59 @@ class CartoonScreenTest {
   var hiltTestRule = HiltAndroidRule(this)
 
   @get:Rule(order = 2)
-  var composeTestRule = createComposeRule()
+  var composeTestRule = createAndroidComposeRule<MainActivity>()
 
   @Before
   fun setup() {
     hiltTestRule.inject()
     cartoonsListViewModel = CartoonsListViewModel(cartoonRepository = FakeCartoonRepositoryImpl())
-    composeTestRule.setContent {
+    composeTestRule.activity.setContent {
       CartoonsScreen(viewModel = cartoonsListViewModel)
     }
   }
 
   @Test
-  fun app_displays_list_of_items() {
-    //assert the list is displayed
-    composeTestRule.onNodeWithText("Cartoons").assertIsDisplayed()
-
-    //assert all items exist within the tree
-    /*dummyItems.forEach { item ->
-      composeTestRule.onNodeWithText(item.name).assertExists()
-    }*/
+  fun verifyThatCartoonsListIsDisplayedAfterLoad() {
+    composeTestRule.onNodeWithStringIdTag(R.string.tag_cartoons_list).assertIsDisplayed()
   }
+
+  @Test
+  fun verifyThatSearchIsActiveAfterSearchIconClick() {
+    composeTestRule.onNodeWithStringIdContentDescription(R.string.search).performClick()
+    composeTestRule.onNodeWithStringIdText(R.string.enter_phrase_here).assertIsDisplayed()
+  }
+
+  @Test
+  fun verifyThatSearchIsInactiveAfterCloseIconClick() {
+    composeTestRule.onNodeWithStringIdContentDescription(R.string.search).performClick()
+    composeTestRule.onNodeWithStringIdContentDescription(R.string.close).performClick()
+    composeTestRule.onNodeWithStringIdTag(R.string.tag_top_bar).assertTextEquals(composeTestRule.activity.getString(R.string.app_name))
+  }
+
+  @Test
+  fun verifyThatCartoonsListIsEmptyAfterIncorrectlyEnteredTitleQuery() {
+    composeTestRule.onNodeWithStringIdContentDescription(R.string.search).performClick()
+    composeTestRule.onNodeWithStringIdTag(R.string.tag_search_text_field)
+      .performTextInput("Wrong title")
+    composeTestRule.onNodeWithStringIdText(R.string.empty_list).assertIsDisplayed()
+  }
+
+  @Test
+  fun verifyThatCartoonItemIsDisplayedAfterCorrectlyEnteredTitleQuery() {
+    val query = "Fake cartoon 2"
+    composeTestRule.onNodeWithStringIdContentDescription(R.string.search).performClick()
+    composeTestRule.onNodeWithStringIdTag(R.string.tag_search_text_field).performTextInput(query)
+    composeTestRule.onNodeWithStringIdTag(R.string.tag_cartoons_list)
+      .performScrollToNode(hasText(query)).assertIsDisplayed()
+  }
+
+  /*@Test
+  fun verifyThatCartoonDetailsScreenIsDisplayedAfterClickingItem() {
+    val cartoon = fakeCartoons[0]
+    verifyThatCartoonsListIsDisplayedAfterLoad()
+    composeTestRule.onNodeWithStringIdTag(R.string.tag_cartoons_list)
+      .performScrollToNode(hasText(cartoon.title)).performClick()
+    composeTestRule.onNodeWithStringIdTag(R.string.tag_top_bar).assertTextEquals(cartoon.title)
+  }*/
+
 }

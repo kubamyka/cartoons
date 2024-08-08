@@ -3,7 +3,7 @@ package com.kmcoding.cartoons
 import com.kmcoding.cartoons.data.repository.FakeCartoonRepositoryImpl
 import com.kmcoding.cartoons.data.source.FakeDataSource.fakeCartoons
 import com.kmcoding.cartoons.data.source.FakeDataSource.getFakeCartoonsWithQuerySize
-import com.kmcoding.cartoons.extension.MainDispatcherRule
+import com.kmcoding.cartoons.util.MainDispatcherRule
 import com.kmcoding.cartoons.view.screens.list.CartoonsListViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

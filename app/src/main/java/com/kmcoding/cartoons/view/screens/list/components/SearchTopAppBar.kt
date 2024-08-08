@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -51,9 +52,12 @@ fun SearchTopAppBar(query: String, onQueryChange: (String) -> Unit, isSearchActi
                 contentDescription = stringResource(R.string.search),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
               )
-            }, modifier = Modifier.weight(1f))
+            }, modifier = Modifier
+              .weight(1f)
+              .testTag(stringResource(id = R.string.tag_search_text_field)))
         } else {
-          Text(text = stringResource(id = R.string.app_name))
+          Text(text = stringResource(id = R.string.app_name), modifier = Modifier.testTag(
+            stringResource(id = R.string.tag_top_bar)))
           Spacer(modifier = Modifier.weight(1f))
         }
 

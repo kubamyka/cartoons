@@ -10,16 +10,16 @@ plugins {
 
 android {
   namespace = "com.kmcoding.cartoons"
-  compileSdk = 34
+  compileSdk = 35
 
   defaultConfig {
     applicationId = "com.kmcoding.cartoons"
     minSdk = 24
-    targetSdk = 34
+    targetSdk = 35
     versionCode = 1
     versionName = "1.0"
 
-    testInstrumentationRunner = "com.kmcoding.cartoons.CartoonsTestRunner"
+    testInstrumentationRunner = "com.kmcoding.cartoons.util.CartoonsTestRunner"
     vectorDrawables {
       useSupportLibrary = true
     }

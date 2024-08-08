@@ -1,4 +1,4 @@
-package com.kmcoding.cartoons
+package com.kmcoding.cartoons.util
 
 import android.app.Application
 import android.content.Context
