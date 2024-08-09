@@ -44,7 +44,7 @@ fun CartoonDetailsScreen(cartoon: Cartoon, modifier: Modifier = Modifier,
   Scaffold(topBar = {
     TopAppBar(colors = topAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer,
       titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer), title = {
-      Text(text = cartoon.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+      Text(text = cartoon.title, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.testTag(stringResource(id = R.string.tag_top_bar)))
     }, navigationIcon = {
       IconButton(onClick = navigateBack) {
         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
