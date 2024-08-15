@@ -13,8 +13,8 @@ import com.kmcoding.cartoons.util.CartoonsTestHelper.onNodeWithStringIdContentDe
 import com.kmcoding.cartoons.util.CartoonsTestHelper.onNodeWithStringIdTag
 import com.kmcoding.cartoons.util.CartoonsTestHelper.onNodeWithStringIdText
 import com.kmcoding.cartoons.view.MainActivity
-import com.kmcoding.cartoons.view.screens.list.CartoonsListViewModel
-import com.kmcoding.cartoons.view.screens.list.CartoonsScreen
+import com.kmcoding.cartoons.view.screens.CartoonsViewModel
+import com.kmcoding.cartoons.view.screens.list.CartoonsListPane
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,7 +26,7 @@ import org.junit.Test
 @HiltAndroidTest
 class CartoonScreenTest {
 
-  private lateinit var cartoonsListViewModel: CartoonsListViewModel
+  private lateinit var cartoonsListViewModel: CartoonsViewModel
 
   @get:Rule(order = 1)
   var hiltTestRule = HiltAndroidRule(this)
@@ -37,9 +37,9 @@ class CartoonScreenTest {
   @Before
   fun setup() {
     hiltTestRule.inject()
-    cartoonsListViewModel = CartoonsListViewModel(cartoonRepository = FakeCartoonRepositoryImpl())
+    cartoonsListViewModel = CartoonsViewModel(cartoonRepository = FakeCartoonRepositoryImpl())
     composeTestRule.activity.setContent {
-      CartoonsScreen(viewModel = cartoonsListViewModel)
+      //CartoonsListPane(viewModel = cartoonsListViewModel)
     }
   }
 

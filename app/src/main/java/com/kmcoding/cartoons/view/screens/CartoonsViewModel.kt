@@ -1,4 +1,4 @@
-package com.kmcoding.cartoons.view.screens.list
+package com.kmcoding.cartoons.view.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CartoonsListViewModel @Inject constructor(private val cartoonRepository: CartoonRepository) :
+class CartoonsViewModel @Inject constructor(private val cartoonRepository: CartoonRepository) :
   ViewModel() {
 
   private val _isLoading = MutableStateFlow(false)
@@ -34,6 +34,9 @@ class CartoonsListViewModel @Inject constructor(private val cartoonRepository: C
 
   private val _searchQuery = MutableStateFlow("")
   val searchQuery = _searchQuery.asStateFlow()
+
+  private val _selectedCartoon = MutableStateFlow<Cartoon?>(null)
+  val selectedCartoon = _selectedCartoon.asStateFlow()
 
   private val _snackBarChannel = Channel<UiText>()
   val snackBarChannel = _snackBarChannel.receiveAsFlow()
@@ -56,17 +59,16 @@ class CartoonsListViewModel @Inject constructor(private val cartoonRepository: C
   fun fetchCartoons() {
     setLoading(true)
     viewModelScope.launch {
-      cartoonRepository.getCartoons()
-        .flowOn(Dispatchers.IO)
-        .catch { error ->
-          setLoading(false)
-          sendErrorMessage(error)
-        }.map { list ->
-          list.sortedBy { it.title }
-        }.collect { list ->
-          setLoading(false)
-          _cartoons.update { list }
-        }
+      cartoonRepository.getCartoons().flowOn(Dispatchers.IO).catch { error ->
+        setLoading(false)
+        sendErrorMessage(error)
+      }.map { list ->
+        list.sortedBy { it.title }
+      }.collect { list ->
+        setLoading(false)
+        updateCartoons(list)
+        updateSelectedCartoon(_selectedCartoon.value ?: list.first())
+      }
     }
   }
 
@@ -81,6 +83,14 @@ class CartoonsListViewModel @Inject constructor(private val cartoonRepository: C
 
   fun updateQuery(query: String) {
     _searchQuery.update { query }
+  }
+
+  fun updateSelectedCartoon(cartoon: Cartoon) {
+    _selectedCartoon.update { cartoon }
+  }
+
+  private fun updateCartoons(cartoons: List<Cartoon>) {
+    _cartoons.update { cartoons }
   }
 
   private suspend fun sendErrorMessage(error: Throwable) {

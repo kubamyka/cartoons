@@ -1,6 +1,10 @@
 <resources>
   <string name="app_name">Cartoons</string>
 
+  <string name="menu_cartoons">Cartoons</string>
+  <string name="menu_favourites">Favourites</string>
+  <string name="menu_settings">Settings</string>
+
   <string name="creation_year">Creation year:</string>
   <string name="episodes">Episodes:</string>
   <string name="episode_duration">Episode duration (min):</string>
@@ -14,6 +18,7 @@
   <string name="enter_phrase_here">Enter phrase here…</string>
   <string name="empty_list">There are no items to display</string>
   <string name="error_download_cartoons">Download cartoons error</string>
+  <string name="search_cartoons">search cartoons</string>
 
   <string name="tag_cartoons_list">Cartoons list</string>
   <string name="tag_search_text_field">Search text field</string>

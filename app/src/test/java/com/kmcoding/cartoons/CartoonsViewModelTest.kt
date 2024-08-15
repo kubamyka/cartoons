@@ -4,7 +4,7 @@ import com.kmcoding.cartoons.data.repository.FakeCartoonRepositoryImpl
 import com.kmcoding.cartoons.data.source.FakeDataSource.fakeCartoons
 import com.kmcoding.cartoons.data.source.FakeDataSource.getFakeCartoonsWithQuerySize
 import com.kmcoding.cartoons.util.MainDispatcherRule
-import com.kmcoding.cartoons.view.screens.list.CartoonsListViewModel
+import com.kmcoding.cartoons.view.screens.CartoonsViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
@@ -14,16 +14,16 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class CartoonsListViewModelTest {
+class CartoonsViewModelTest {
 
-  private lateinit var cartoonsListViewModel: CartoonsListViewModel
+  private lateinit var cartoonsListViewModel: CartoonsViewModel
 
   @get:Rule
   val mainDispatcherRule = MainDispatcherRule()
 
   @Before
   fun setup() {
-    cartoonsListViewModel = CartoonsListViewModel(cartoonRepository = FakeCartoonRepositoryImpl())
+    cartoonsListViewModel = CartoonsViewModel(cartoonRepository = FakeCartoonRepositoryImpl())
   }
 
   @Test
