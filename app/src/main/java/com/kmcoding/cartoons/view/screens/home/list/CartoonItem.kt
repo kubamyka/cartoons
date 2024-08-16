@@ -1,4 +1,4 @@
-package com.kmcoding.cartoons.view.screens.list
+package com.kmcoding.cartoons.view.screens.home.list
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -37,7 +37,7 @@ fun CartoonItem(modifier: Modifier = Modifier, cartoon: Cartoon,
     modifier = modifier
       .fillMaxWidth()
       .wrapContentHeight(align = Alignment.Top)
-      .padding(top = 16.dp)) {
+      .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
     Row(modifier = Modifier
       .fillMaxWidth()
       .clickable { navigateToDetails(cartoon) }

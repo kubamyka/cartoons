@@ -1,4 +1,4 @@
-package com.kmcoding.cartoons.view.screens
+package com.kmcoding.cartoons.view.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CartoonsViewModel @Inject constructor(private val cartoonRepository: CartoonRepository) :
+class HomeViewModel @Inject constructor(private val cartoonRepository: CartoonRepository) :
   ViewModel() {
 
   private val _isLoading = MutableStateFlow(false)

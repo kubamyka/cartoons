@@ -1,8 +1,10 @@
-package com.kmcoding.cartoons.view.screens.list
+package com.kmcoding.cartoons.view.screens.home.list
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
@@ -19,13 +21,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kmcoding.cartoons.R
 
 @Composable
 fun CartoonsSearchBar(query: String, onQueryChange: (String) -> Unit,
   isSearchActive: Boolean = false, toggleSearchActive: () -> Unit) {
-  Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+  Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.height(56.dp).fillMaxWidth()) {
     if (isSearchActive) {
       TextField(value = query, placeholder = {
         Text(text = stringResource(id = R.string.enter_phrase_here), fontSize = 18.sp,

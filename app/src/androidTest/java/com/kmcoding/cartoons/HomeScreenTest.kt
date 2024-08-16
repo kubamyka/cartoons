@@ -5,16 +5,18 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import com.kmcoding.cartoons.data.repository.FakeCartoonRepositoryImpl
+import com.kmcoding.cartoons.data.source.FakeDataSource.fakeCartoons
 import com.kmcoding.cartoons.util.CartoonsTestHelper.onNodeWithStringIdContentDescription
 import com.kmcoding.cartoons.util.CartoonsTestHelper.onNodeWithStringIdTag
 import com.kmcoding.cartoons.util.CartoonsTestHelper.onNodeWithStringIdText
+import com.kmcoding.cartoons.view.CartoonsAppContent
 import com.kmcoding.cartoons.view.MainActivity
-import com.kmcoding.cartoons.view.screens.CartoonsViewModel
-import com.kmcoding.cartoons.view.screens.list.CartoonsListPane
+import com.kmcoding.cartoons.view.screens.home.HomeViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,9 +26,9 @@ import org.junit.Test
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
-class CartoonScreenTest {
+class HomeScreenTest {
 
-  private lateinit var cartoonsListViewModel: CartoonsViewModel
+  private lateinit var homeViewModel: HomeViewModel
 
   @get:Rule(order = 1)
   var hiltTestRule = HiltAndroidRule(this)
@@ -37,9 +39,9 @@ class CartoonScreenTest {
   @Before
   fun setup() {
     hiltTestRule.inject()
-    cartoonsListViewModel = CartoonsViewModel(cartoonRepository = FakeCartoonRepositoryImpl())
+    homeViewModel = HomeViewModel(cartoonRepository = FakeCartoonRepositoryImpl())
     composeTestRule.activity.setContent {
-      //CartoonsListPane(viewModel = cartoonsListViewModel)
+      CartoonsAppContent(viewModel = homeViewModel)
     }
   }
 
@@ -59,7 +61,7 @@ class CartoonScreenTest {
     composeTestRule.onNodeWithStringIdContentDescription(R.string.search).performClick()
     composeTestRule.onNodeWithStringIdContentDescription(R.string.close).performClick()
     composeTestRule.onNodeWithStringIdTag(R.string.tag_top_bar)
-      .assertTextEquals(composeTestRule.activity.getString(R.string.app_name))
+      .assertTextEquals(composeTestRule.activity.getString(R.string.search_cartoons))
   }
 
   @Test
@@ -79,4 +81,20 @@ class CartoonScreenTest {
       .performScrollToNode(hasText(query)).assertIsDisplayed()
   }
 
+  @Test
+  fun verifyThatCartoonDetailsAreDisplayedAfterLoad() {
+    //TODO
+    val cartoon = fakeCartoons[0]
+    composeTestRule.onNodeWithStringIdTag(R.string.tag_top_bar).assertTextEquals(cartoon.title)
+    composeTestRule.onNodeWithStringIdText(R.string.creation_year).assertIsDisplayed()
+    composeTestRule.onNodeWithText(cartoon.year.toString()).assertIsDisplayed()
+    composeTestRule.onNodeWithStringIdText(R.string.episodes).assertIsDisplayed()
+    composeTestRule.onNodeWithText(cartoon.episodes.toString()).assertIsDisplayed()
+    composeTestRule.onNodeWithStringIdText(R.string.episode_duration).assertIsDisplayed()
+    composeTestRule.onNodeWithText(cartoon.episodeDuration.toString()).assertIsDisplayed()
+    composeTestRule.onNodeWithStringIdText(R.string.creator).assertIsDisplayed()
+    composeTestRule.onNodeWithText(cartoon.creators[0]).assertIsDisplayed()
+    composeTestRule.onNodeWithStringIdText(R.string.genre).assertIsDisplayed()
+    composeTestRule.onNodeWithText(cartoon.genres[0]).assertIsDisplayed()
+  }
 }
