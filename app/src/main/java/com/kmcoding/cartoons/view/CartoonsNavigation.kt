@@ -8,9 +8,12 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.kmcoding.cartoons.R
 
-enum class CartoonsDestination(@StringRes
-val labelRes: Int, val icon: ImageVector) {
-  Cartoons(R.string.menu_home, Icons.Default.Home),
-  Favourites(R.string.menu_favourites, Icons.Default.Favorite),
-  Settings(R.string.menu_settings, Icons.Default.Settings),
+enum class CartoonsDestination(
+    @StringRes
+    val labelRes: Int,
+    val icon: ImageVector,
+) {
+    Cartoons(R.string.menu_home, Icons.Default.Home),
+    Favourites(R.string.menu_favourites, Icons.Default.Favorite),
+    Settings(R.string.menu_settings, Icons.Default.Settings),
 }

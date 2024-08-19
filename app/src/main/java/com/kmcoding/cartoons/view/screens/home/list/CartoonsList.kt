@@ -24,43 +24,63 @@ import com.kmcoding.cartoons.domain.model.Cartoon
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CartoonsListPane(navigateToDetails: (Cartoon) -> Unit, onQueryChange: (String) -> Unit,
-  toggleSearchActive: () -> Unit, pullRefreshState: PullRefreshState, modifier: Modifier = Modifier,
-  cartoons: List<Cartoon> = listOf(), isSearchActive: Boolean = false, isLoading: Boolean = false,
-  query: String = "") {
-  Box(modifier = modifier
-    .fillMaxSize()
-    .pullRefresh(pullRefreshState)) {
-    if (cartoons.isEmpty()) {
-      Box(modifier = Modifier
-        .fillMaxSize()
-        .pullRefresh(pullRefreshState)
-        .verticalScroll(rememberScrollState()), contentAlignment = Alignment.Center) {
-        Text(text = stringResource(id = R.string.empty_list))
-      }
-    } else {
-      LazyColumn(modifier = Modifier
-        .fillMaxWidth()
-        .testTag(stringResource(id = R.string.tag_cartoons_list))) {
-        item {
-          Box(modifier = Modifier.padding(16.dp)) {
-            CartoonsSearchBar(query = query, onQueryChange = { onQueryChange(it) },
-              isSearchActive = isSearchActive, toggleSearchActive = { toggleSearchActive() })
-          }
+fun CartoonsListPane(
+    navigateToDetails: (Cartoon) -> Unit,
+    onQueryChange: (String) -> Unit,
+    toggleSearchActive: () -> Unit,
+    pullRefreshState: PullRefreshState,
+    modifier: Modifier = Modifier,
+    cartoons: List<Cartoon> = listOf(),
+    isSearchActive: Boolean = false,
+    isLoading: Boolean = false,
+    query: String = "",
+) {
+    Box(
+        modifier =
+            modifier
+                .fillMaxSize()
+                .pullRefresh(pullRefreshState),
+    ) {
+        if (cartoons.isEmpty()) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .pullRefresh(pullRefreshState)
+                        .verticalScroll(rememberScrollState()),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(text = stringResource(id = R.string.empty_list))
+            }
+        } else {
+            LazyColumn(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .testTag(stringResource(id = R.string.tag_cartoons_list)),
+            ) {
+                item {
+                    Box(modifier = Modifier.padding(16.dp)) {
+                        CartoonsSearchBar(
+                            query = query,
+                            onQueryChange = { onQueryChange(it) },
+                            isSearchActive = isSearchActive,
+                            toggleSearchActive = { toggleSearchActive() },
+                        )
+                    }
+                }
+                items(key = { cartoon ->
+                    cartoon.id
+                }, items = cartoons) {
+                    CartoonItem(cartoon = it, navigateToDetails = navigateToDetails)
+                }
+            }
         }
-        items(key = { cartoon ->
-          cartoon.id
-        }, items = cartoons) {
-          CartoonItem(cartoon = it, navigateToDetails = navigateToDetails)
-        }
-      }
+
+        PullRefreshIndicator(
+            refreshing = isLoading,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
     }
-
-    PullRefreshIndicator(
-      refreshing = isLoading,
-      state = pullRefreshState,
-      modifier = Modifier.align(Alignment.TopCenter),
-    )
-  }
 }
-

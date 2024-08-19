@@ -31,50 +31,71 @@ import com.kmcoding.cartoons.data.source.FakeDataSource.fakeCartoons
 import com.kmcoding.cartoons.domain.model.Cartoon
 
 @Composable
-fun CartoonItem(modifier: Modifier = Modifier, cartoon: Cartoon,
-  navigateToDetails: (Cartoon) -> Unit) {
-  Card(elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-    modifier = modifier
-      .fillMaxWidth()
-      .wrapContentHeight(align = Alignment.Top)
-      .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
-    Row(modifier = Modifier
-      .fillMaxWidth()
-      .clickable { navigateToDetails(cartoon) }
-      .background(color = MaterialTheme.colorScheme.onPrimary),
-      verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
-      CartoonCover(coverUrl = cartoon.coverUrl)
-      CartoonContent(cartoon = cartoon)
+fun CartoonItem(
+    modifier: Modifier = Modifier,
+    cartoon: Cartoon,
+    navigateToDetails: (Cartoon) -> Unit,
+) {
+    Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .wrapContentHeight(align = Alignment.Top)
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+    ) {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clickable { navigateToDetails(cartoon) }
+                    .background(color = MaterialTheme.colorScheme.onPrimary),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+        ) {
+            CartoonCover(coverUrl = cartoon.coverUrl)
+            CartoonContent(cartoon = cartoon)
+        }
     }
-  }
 }
 
 @Composable
 fun CartoonCover(coverUrl: String) {
-  Card(shape = RoundedCornerShape(16.dp), border = BorderStroke(width = 1.dp, color = Color.Black),
-    modifier = Modifier.padding(12.dp),
-    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)) {
-    Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.onPrimary)) {
-      AsyncImage(model = coverUrl, error = painterResource(id = R.drawable.ic_no_photo),
-        contentDescription = null, modifier = Modifier.size(64.dp),
-        contentScale = ContentScale.Crop)
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(width = 1.dp, color = Color.Black),
+        modifier = Modifier.padding(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+    ) {
+        Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.onPrimary)) {
+            AsyncImage(
+                model = coverUrl,
+                error = painterResource(id = R.drawable.ic_no_photo),
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                contentScale = ContentScale.Crop,
+            )
+        }
     }
-  }
 }
 
 @Composable
 fun CartoonContent(cartoon: Cartoon) {
-  Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.Start) {
-    Text(text = cartoon.title, style = MaterialTheme.typography.titleLarge)
-    Text(text = "${stringResource(id = R.string.creation_year)} ${cartoon.year}",
-      style = MaterialTheme.typography.bodySmall)
-    Text(text = "${stringResource(id = R.string.episodes)} ${cartoon.episodes}",
-      style = MaterialTheme.typography.bodySmall)
-  }
+    Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.Start) {
+        Text(text = cartoon.title, style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = "${stringResource(id = R.string.creation_year)} ${cartoon.year}",
+            style = MaterialTheme.typography.bodySmall,
+        )
+        Text(
+            text = "${stringResource(id = R.string.episodes)} ${cartoon.episodes}",
+            style = MaterialTheme.typography.bodySmall,
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CartoonItemPreview() {
-  CartoonItem(cartoon = fakeCartoons[0], navigateToDetails = {})
+    CartoonItem(cartoon = fakeCartoons[0], navigateToDetails = {})
 }

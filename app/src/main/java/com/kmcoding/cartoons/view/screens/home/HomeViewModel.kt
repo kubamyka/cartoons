@@ -23,83 +23,86 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val cartoonRepository: CartoonRepository) :
-  ViewModel() {
+class HomeViewModel
+    @Inject
+    constructor(private val cartoonRepository: CartoonRepository) :
+    ViewModel() {
+        private val _isLoading = MutableStateFlow(false)
+        val isLoading = _isLoading.asStateFlow()
 
-  private val _isLoading = MutableStateFlow(false)
-  val isLoading = _isLoading.asStateFlow()
+        private val _isSearchActive = MutableStateFlow(false)
+        val isSearchActive = _isSearchActive.asStateFlow()
 
-  private val _isSearchActive = MutableStateFlow(false)
-  val isSearchActive = _isSearchActive.asStateFlow()
+        private val _searchQuery = MutableStateFlow("")
+        val searchQuery = _searchQuery.asStateFlow()
 
-  private val _searchQuery = MutableStateFlow("")
-  val searchQuery = _searchQuery.asStateFlow()
+        private val _selectedCartoon = MutableStateFlow<Cartoon?>(null)
+        val selectedCartoon = _selectedCartoon.asStateFlow()
 
-  private val _selectedCartoon = MutableStateFlow<Cartoon?>(null)
-  val selectedCartoon = _selectedCartoon.asStateFlow()
+        private val _snackBarChannel = Channel<UiText>()
+        val snackBarChannel = _snackBarChannel.receiveAsFlow()
 
-  private val _snackBarChannel = Channel<UiText>()
-  val snackBarChannel = _snackBarChannel.receiveAsFlow()
+        private val _cartoons = MutableStateFlow<List<Cartoon>>(listOf())
+        val cartoons =
+            searchQuery.combine(_cartoons) { text, cartoons ->
+                if (text.isBlank()) {
+                    cartoons
+                } else {
+                    cartoons.filter {
+                        it.title.contains(text, ignoreCase = true)
+                    }
+                }
+            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _cartoons.value)
 
-  private val _cartoons = MutableStateFlow<List<Cartoon>>(listOf())
-  val cartoons = searchQuery.combine(_cartoons) { text, cartoons ->
-    if (text.isBlank()) {
-      cartoons
-    } else {
-      cartoons.filter {
-        it.title.contains(text, ignoreCase = true)
-      }
+        init {
+            fetchCartoons()
+        }
+
+        fun fetchCartoons() {
+            setLoading(true)
+            viewModelScope.launch {
+                cartoonRepository.getCartoons().flowOn(Dispatchers.IO).catch { error ->
+                    setLoading(false)
+                    sendErrorMessage(error)
+                }.map { list ->
+                    list.sortedBy { it.title }
+                }.collect { list ->
+                    setLoading(false)
+                    updateCartoons(list)
+                    updateSelectedCartoon(_selectedCartoon.value ?: list.first())
+                }
+            }
+        }
+
+        private fun setLoading(loading: Boolean) {
+            _isLoading.update { loading }
+        }
+
+        fun toggleSearchActive() {
+            updateQuery("")
+            _isSearchActive.update { !it }
+        }
+
+        fun updateQuery(query: String) {
+            _searchQuery.update { query }
+        }
+
+        fun updateSelectedCartoon(cartoon: Cartoon) {
+            _selectedCartoon.update { cartoon }
+        }
+
+        private fun updateCartoons(cartoons: List<Cartoon>) {
+            _cartoons.update { cartoons }
+        }
+
+        private suspend fun sendErrorMessage(error: Throwable) {
+            val message = error.localizedMessage
+            val uiText =
+                if (message == null) {
+                    UiText.StringResource(R.string.error_download_cartoons)
+                } else {
+                    UiText.DynamicString(message)
+                }
+            _snackBarChannel.send(uiText)
+        }
     }
-  }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _cartoons.value)
-
-  init {
-    fetchCartoons()
-  }
-
-  fun fetchCartoons() {
-    setLoading(true)
-    viewModelScope.launch {
-      cartoonRepository.getCartoons().flowOn(Dispatchers.IO).catch { error ->
-        setLoading(false)
-        sendErrorMessage(error)
-      }.map { list ->
-        list.sortedBy { it.title }
-      }.collect { list ->
-        setLoading(false)
-        updateCartoons(list)
-        updateSelectedCartoon(_selectedCartoon.value ?: list.first())
-      }
-    }
-  }
-
-  private fun setLoading(loading: Boolean) {
-    _isLoading.update { loading }
-  }
-
-  fun toggleSearchActive() {
-    updateQuery("")
-    _isSearchActive.update { !it }
-  }
-
-  fun updateQuery(query: String) {
-    _searchQuery.update { query }
-  }
-
-  fun updateSelectedCartoon(cartoon: Cartoon) {
-    _selectedCartoon.update { cartoon }
-  }
-
-  private fun updateCartoons(cartoons: List<Cartoon>) {
-    _cartoons.update { cartoons }
-  }
-
-  private suspend fun sendErrorMessage(error: Throwable) {
-    val message = error.localizedMessage
-    val uiText = if (message == null) {
-      UiText.StringResource(R.string.error_download_cartoons)
-    } else {
-      UiText.DynamicString(message)
-    }
-    _snackBarChannel.send(uiText)
-  }
-}

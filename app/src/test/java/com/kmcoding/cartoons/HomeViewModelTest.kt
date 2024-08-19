@@ -15,51 +15,54 @@ import org.junit.Rule
 import org.junit.Test
 
 class HomeViewModelTest {
+    private lateinit var homeViewModel: HomeViewModel
 
-  private lateinit var homeViewModel: HomeViewModel
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
-  @get:Rule
-  val mainDispatcherRule = MainDispatcherRule()
-
-  @Before
-  fun setup() {
-    homeViewModel = HomeViewModel(cartoonRepository = FakeCartoonRepositoryImpl())
-  }
-
-  @Test
-  fun `verify cartoons list size after load`() = runTest {
-    backgroundScope.launch(mainDispatcherRule.testDispatcher) {
-      homeViewModel.cartoons.collect()
+    @Before
+    fun setup() {
+        homeViewModel = HomeViewModel(cartoonRepository = FakeCartoonRepositoryImpl())
     }
-    assertEquals(fakeCartoons.size, homeViewModel.cartoons.value.size)
-  }
 
-  @Test
-  fun `verify if search is active after toggle`() = runTest {
-    homeViewModel.toggleSearchActive()
+    @Test
+    fun `verify cartoons list size after load`() =
+        runTest {
+            backgroundScope.launch(mainDispatcherRule.testDispatcher) {
+                homeViewModel.cartoons.collect()
+            }
+            assertEquals(fakeCartoons.size, homeViewModel.cartoons.value.size)
+        }
 
-    assertTrue(homeViewModel.isSearchActive.value)
-    assertEquals("", homeViewModel.searchQuery.value)
-  }
+    @Test
+    fun `verify if search is active after toggle`() =
+        runTest {
+            homeViewModel.toggleSearchActive()
 
-  private fun `verify cartoons list size after entered title query`(query: String) {
-    homeViewModel.updateQuery(query)
-    assertEquals(getFakeCartoonsWithQuerySize(query), homeViewModel.cartoons.value.size)
-  }
+            assertTrue(homeViewModel.isSearchActive.value)
+            assertEquals("", homeViewModel.searchQuery.value)
+        }
 
-  @Test
-  fun `verify if cartoons list is empty after incorrectly entered title query`() = runTest {
-    backgroundScope.launch(mainDispatcherRule.testDispatcher) {
-      homeViewModel.cartoons.collect()
+    private fun `verify cartoons list size after entered title query`(query: String) {
+        homeViewModel.updateQuery(query)
+        assertEquals(getFakeCartoonsWithQuerySize(query), homeViewModel.cartoons.value.size)
     }
-    `verify cartoons list size after entered title query`("Wrong title")
-  }
 
-  @Test
-  fun `verify cartoons list size after correctly entered title query`() = runTest {
-    backgroundScope.launch(mainDispatcherRule.testDispatcher) {
-      homeViewModel.cartoons.collect()
-    }
-    `verify cartoons list size after entered title query`("Fake cartoon 2")
-  }
+    @Test
+    fun `verify if cartoons list is empty after incorrectly entered title query`() =
+        runTest {
+            backgroundScope.launch(mainDispatcherRule.testDispatcher) {
+                homeViewModel.cartoons.collect()
+            }
+            `verify cartoons list size after entered title query`("Wrong title")
+        }
+
+    @Test
+    fun `verify cartoons list size after correctly entered title query`() =
+        runTest {
+            backgroundScope.launch(mainDispatcherRule.testDispatcher) {
+                homeViewModel.cartoons.collect()
+            }
+            `verify cartoons list size after entered title query`("Fake cartoon 2")
+        }
 }
