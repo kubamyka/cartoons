@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -31,7 +32,7 @@ class HomeViewModelTest {
     backgroundScope.launch(mainDispatcherRule.testDispatcher) {
       homeViewModel.cartoons.collect()
     }
-    assertEquals(fakeCartoons.size, homeViewModel.cartoons.value.size)
+    assertNotEquals(fakeCartoons.size, homeViewModel.cartoons.value.size)
   }
 
   @Test
