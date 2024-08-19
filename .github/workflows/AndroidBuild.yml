@@ -21,6 +21,9 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      - name: Run Unit tests
+        run: ./gradlew clean testDebug
+
       - name: Build with Gradle
         run: ./gradlew build
 
