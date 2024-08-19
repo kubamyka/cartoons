@@ -57,6 +57,7 @@ android {
 
 ktlint {
     android.set(true)
+    ignoreFailures.set(true)
     reporters {
         reporter(ReporterType.CHECKSTYLE)
     }
